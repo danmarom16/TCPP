@@ -37,8 +37,13 @@ def valid_port(port):
 def phrase_data(data):
     empty_req = "GET / HTTP/1.1"
 
-    connection_string = data.split("\r\n")[2]
-    connection_status = connection_string.split(" ")[1]
+    array_data = data.split("\r\n")
+
+    for i in range(len(array_data)):
+        if array_data[i] == "Connection: closed" or array_data[i] == "Connection: keep-alive":
+            break
+    
+    connection_status = array_data[i].split(" ")[1]
 
     req = data.split("\r\n", 1)[0]
     if(req == empty_req):
@@ -48,7 +53,7 @@ def phrase_data(data):
         file = splitted_req[1].split(" ")[0]
 
     return file, connection_status
-
+    
 
 """
     Returns True if the file is inside the current Directory.
@@ -111,7 +116,8 @@ def build_res(con_stat, file_path, file_exists, redirect_flag):
                 "Connection: closed",
                 '\r\n'
             ]
-            res = '\r\n'.join(lines_of_res).encode() 
+            res = '\r\n'.join(lines_of_res).encode()
+    print(res)
     return res
 
 """
@@ -146,7 +152,6 @@ def main():
     while True:
 
         client_socket, client_address = server.accept()
-        print('Connection from: ', client_address)
 
         # Initialized for 1st iteration
         con_stat = CONTINUE_INTERACTION
