@@ -96,7 +96,7 @@ def build_res(con_stat, file_path, file_exists, redirect_flag):
     if redirect_flag:
             lines_of_res = [
                 "HTTP/1.1 301 Moved Permanently",
-                f"Connection: closed",
+                f"Connection: close",
                 "Location: /result.html",
                 '\r\n'
             ]
@@ -113,11 +113,10 @@ def build_res(con_stat, file_path, file_exists, redirect_flag):
         else:
             lines_of_res = [
                 "HTTP/1.1 404 Not Found",
-                "Connection: closed",
+                "Connection: close",
                 '\r\n'
             ]
             res = '\r\n'.join(lines_of_res).encode()
-    print(res)
     return res
 
 """
